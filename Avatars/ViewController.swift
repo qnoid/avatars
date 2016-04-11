@@ -20,8 +20,11 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.defaultAvatar.imager(session: self.session).image(self.defaultImageView)
-        self.customAvatar.imager(session: self.session).image(self.customImageView)
+        self.defaultAvatar.imager.image(self.defaultImageView)
+        
+        var imager = self.customAvatar.imager
+        imager.session = self.session
+        self.customAvatar.imager.image(self.customImageView)
     }
     
     override func didReceiveMemoryWarning() {

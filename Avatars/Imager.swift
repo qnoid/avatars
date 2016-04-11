@@ -9,17 +9,23 @@
 import UIKit
 
 protocol Imager {
+    var session: Session? { get set }
+    
     func image(imageView: UIImageView)
 }
 
-struct SessionImager: Imager
+class SessionImager: Imager
 {
-    unowned let session: Session
+    weak var session: Session?
     unowned let avatar: CustomAvatar
+    
+    init(avatar: CustomAvatar){
+        self.avatar = avatar
+    }
     
     func image(imageView: UIImageView) {
         
-        let download = self.session.download(self.avatar.image) { [weak imageView = imageView] (data, response, _) in
+        let download = self.session!.download(self.avatar.image) { [weak imageView = imageView] (data, response, _) in
             
             guard let _imageView = imageView else {
                 return
@@ -36,9 +42,15 @@ struct SessionImager: Imager
     }
 }
 
-struct DefaultImager: Imager
+class DefaultImager: Imager
 {
+    var session: Session?
+    
     let avatar: DefaultAvatar
+    
+    init(avatar: DefaultAvatar){
+        self.avatar = avatar
+    }
 
     func image(imageView: UIImageView) {
         imageView.image = UIImage(named: self.avatar.defaultImage)

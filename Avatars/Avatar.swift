@@ -9,7 +9,7 @@
 protocol Avatar {
     var defaultImage: String { get }
     
-    var imager: (session: Session) -> Imager { get }
+    var imager: Imager { get }
 }
 
 class CustomAvatar: Avatar {    
@@ -20,19 +20,15 @@ class CustomAvatar: Avatar {
         self.image = image
     }
     
-    lazy var imager: (session: Session) -> Imager = {
-        return { [unowned self] (session: Session) in
-            return SessionImager(session: session, avatar: self)
-        }
+    lazy var imager: Imager = { [unowned self] in
+        return SessionImager(avatar: self)
     }()
 }
 
 class DefaultAvatar: Avatar {
     let defaultImage = "avatar"
 
-    lazy var imager: (session: Session) -> Imager = {
-        return { [unowned self] _ in
-            return DefaultImager(avatar: self)
-        }
+    lazy var imager: Imager = { [unowned self] in
+        return DefaultImager(avatar: self)
     }()
 }
